@@ -105,3 +105,6 @@ venv.bak/
 
 #test data
 /testData/*
+
+#vscode specific settings
+.vscode/settings.json
