@@ -130,13 +130,13 @@ def main():
     # we will now add some identification information to the first
     # 3 lines of each of the files
     outFileCurrent.write("This file was generated from " + os.path.abspath(inputFileName))
-    outFileCurrent.write("It contains Current sensor data in the form " + inputLines[1][3:])
+    outFileCurrent.write("\nIt contains Current sensor data in the form \n" + inputLines[1][2:])
 
     outFileIMU.write("This file was generated from " + os.path.abspath(inputFileName))
-    outFileIMU.write("It contains IMU Sensor data in the form " + inputLines[2][3:])
+    outFileIMU.write("\nIt contains IMU Sensor data in the form \n" + inputLines[2][2:])
 
-    outFileCurrent.write("This file was generated from " + os.path.abspath(inputFileName))
-    outFileCurrent.write("It contains IMU Sync data in the form " + inputLines[1][3:])
+    outFileIMUSync.write("This file was generated from " + os.path.abspath(inputFileName))
+    outFileIMUSync.write("\nIt contains IMU Sync data in the form \n" + inputLines[3][2:])
 
 
     # Now begins the sorting of the data into it's proper file while 

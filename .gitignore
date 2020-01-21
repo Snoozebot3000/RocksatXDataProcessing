@@ -108,3 +108,6 @@ venv.bak/
 
 #vscode specific settings
 .vscode/settings.json
+outputData/ADCCurrentReadings.dat
+outputData/IMUReadings.dat
+outputData/IMUSync.dat
