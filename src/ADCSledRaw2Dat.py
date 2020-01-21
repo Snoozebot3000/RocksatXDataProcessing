@@ -127,18 +127,66 @@ def main():
 
     # OK so now we have all of our files open for writing 
     # or have quit gracefully to allow the user to fix the issue
+    # we will now add some identification information to the first
+    # 3 lines of each of the files
+    outFileCurrent.write("This file was generated from " + os.path.abspath(inputFileName))
+    outFileCurrent.write("It contains Current sensor data in the form " + inputLines[1][3:])
+
+    outFileIMU.write("This file was generated from " + os.path.abspath(inputFileName))
+    outFileIMU.write("It contains IMU Sensor data in the form " + inputLines[2][3:])
+
+    outFileCurrent.write("This file was generated from " + os.path.abspath(inputFileName))
+    outFileCurrent.write("It contains IMU Sync data in the form " + inputLines[1][3:])
+
 
     # Now begins the sorting of the data into it's proper file while 
     # stripping the data type header.  This will make each file a 
     # Time stamped (micros) from the microcontroller that recorded it
     # The sync pulse from the main C&DH system is recorded in IMUSync
 
+    # This sets up a variable to perform a check on the IMU Sync
+    # If there is no sync pulse it will single that the program needs
+    # to write an error message to the IMU sync file
+    IMUSyncCount = 0
+
     #The first 4 lines are not data so we strip them here
     for index in range(4,len(inputLines)):
         typeLocation = inputLines[index].find(",")
         dataSplit = inputLines[index].split(",")
-        if dataSplit[0] = "49"
-            #This is the first data type that represents the data for 
+        if dataSplit[0] == "49":
+            #This is the first data type that represents the data for Current sensors
+            outFileCurrent.write(inputLines[index][(typeLocation+1):])
+        elif dataSplit[0] == "50":
+            #This is the second datatype and represents the data for the IMU
+            outFileIMU.write(inputLines[index][(typeLocation+1):])
+        elif dataSplit[0] == "51":
+            #This is the thrid data type that shows when the IMU sync happend
+            outFileIMUSync.write(inputLines[index][(typeLocation+1):])
+            IMUSyncCount += 1
+        else:
+            #This is the catch for data corruption we will close the open files and quit with
+            # an error message to the system
+            outFileIMUSync.close()
+            outFileIMU.close()
+            outFileCurrent.close()
+            inFile.close()
+            sys.exit("There is corrupt data in the data file " + os.path.abspath(inputFileName) + \
+                " at line number " + str((index + 1 )))
+
+    # So we have now made it out of the loop that parses the inputLines
+    # let us first check to see if there was a IMU sync in the data
+
+    if IMUSyncCount == 0:
+        outFileIMUSync.write("\nThere was no sync sequence in this data file")
+    
+    # Ok so that is it all of the data is not parsed and put into seperate data files 
+    # to be manipulated later. We will now close all of the open files and exit
+    outFileIMUSync.close()
+    outFileIMU.close()
+    outFileCurrent.close()
+    inFile.close()
+    print("The data file \n" + os.path.abspath(inputFileName) + "\nwas sucsefully processed into the folder\n" + os.path.abspath(outputDirectory))
+    
 
     # This allows the file to run as stand alone or as called to run by another program.
 if __name__ == "__main__":
