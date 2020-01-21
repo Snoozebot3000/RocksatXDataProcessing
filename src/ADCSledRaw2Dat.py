@@ -101,8 +101,44 @@ def main():
     # Open file for output failing nicely if it already exists
     outFileCurrent = open(outputDirectory+"ADCCurrentReadings.dat","x")
 
-    
+    # Check to see if the file exists
+    if os.path.isfile(outputDirectory+"IMUReadings.dat"):
+        print("The output file for the IMU data exist. Overwrite? [y/n]")
+        userInput = input()
+        if userInput[0] == "y" or userInput[0] == "Y":
+            os.remove(outputDirectory+"IMUReadings.dat")
+        else:
+            sys.exit("Program exiting so as to not overwrite the file")
 
+    # Open file for output failing nicely if it already exists
+    outFileIMU = open(outputDirectory+"IMUReadings.dat","x")
+
+    # Check to see if the file exists
+    if os.path.isfile(outputDirectory+"IMUSync.dat"):
+        print("The output file for the IMU Sync data exist. Overwrite? [y/n]")
+        userInput = input()
+        if userInput[0] == "y" or userInput[0] == "Y":
+            os.remove(outputDirectory+"IMUSync.dat")
+        else:
+            sys.exit("Program exiting so as to not overwrite the file")
+
+    # Open file for output failing nicely if it already exists
+    outFileIMUSync = open(outputDirectory+"IMUSync.dat","x")
+
+    # OK so now we have all of our files open for writing 
+    # or have quit gracefully to allow the user to fix the issue
+
+    # Now begins the sorting of the data into it's proper file while 
+    # stripping the data type header.  This will make each file a 
+    # Time stamped (micros) from the microcontroller that recorded it
+    # The sync pulse from the main C&DH system is recorded in IMUSync
+
+    #The first 4 lines are not data so we strip them here
+    for index in range(4,len(inputLines)):
+        typeLocation = inputLines[index].find(",")
+        dataSplit = inputLines[index].split(",")
+        if dataSplit[0] = "49"
+            #This is the first data type that represents the data for 
 
     # This allows the file to run as stand alone or as called to run by another program.
 if __name__ == "__main__":
