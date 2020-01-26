@@ -5,7 +5,7 @@
 This Code is used to process the data collected from the ADC Sled on
 the Space System Lab's UMD 2019 Rocksat X robotic payload.
 
-The purpose is to take the raw file and convert it to serveral sperate
+The purpose is to take the raw file and convert it to several separate
 data files for each of the sensors. The script will take two inputs
 from the command line. The first is the path of the data file that is
 being parsed. The second is the location to store the data files that
@@ -39,10 +39,10 @@ __author__ = 'Nicholas M Limparis'
 __copyright__ = 'Copyright 2020, UMD Rocksat-X'
 __credits__ = ['Nicholas M Limparis']
 __license__ = '{MIT}'
-__version__ = '0.1.0'
+__version__ = '1.0.0'
 __maintainer__ = 'Nicholas M Limparis'
 __email__ = 'nicholas@github.limpar.is'
-__status__ = 'Dev'
+__status__ = 'Rel'
 
 
 #Code goes here.
@@ -179,13 +179,13 @@ def main():
     if IMUSyncCount == 0:
         outFileIMUSync.write("\nThere was no sync sequence in this data file")
     
-    # Ok so that is it all of the data is not parsed and put into seperate data files 
+    # Ok so that is it all of the data is not parsed and put into separate data files 
     # to be manipulated later. We will now close all of the open files and exit
     outFileIMUSync.close()
     outFileIMU.close()
     outFileCurrent.close()
     inFile.close()
-    print("The data file \n" + os.path.abspath(inputFileName) + "\nwas sucsefully processed into the folder\n" + os.path.abspath(outputDirectory))
+    print("The data file \n" + os.path.abspath(inputFileName) + "\nwas successfully processed into the folder\n" + os.path.abspath(outputDirectory))
     
 
     # This allows the file to run as stand alone or as called to run by another program.
