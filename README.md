@@ -8,5 +8,5 @@ This is used on the UMD 2019 Rocksat-X payload.
  - [ ] Get yaml parsing working
  - [ ] Begin the code for parsing the raw IMU values
  - [ ] write the python wrapper for the subprograms that runs through a yaml list of data files to be processed
- - [ ] profit?
+ - [ ] profit? :rocket:
 
