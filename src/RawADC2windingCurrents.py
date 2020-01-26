@@ -21,7 +21,7 @@ this program.
 
 This tool will accept commands as follows and is written in Python 3
 
-python3 ADCSledRaw2Dat.py /Input/File/Path.dat /Output/Files/Folder/
+python3 RawADC2windingCurrents.py /Input/File/Path.dat /Output/Files/Folder/
 
 MIT License
 """
@@ -55,14 +55,6 @@ __status__ = 'Dev'
 
 
 #Code goes here.
-
-
-# print(sys.argv)  # Arguments at index 1 and greater contain the
-# print(len(sys.argv))
-# print(sys.argv[0])
-# print(sys.argv[1])
-# print(sys.argv[2])
-
 def main():
     if (len(sys.argv) != 3):
         print("wrong arg")
@@ -89,6 +81,15 @@ def main():
 
     #separate the file into individual lines
     inputLines  = inFile.readlines()
+
+    #Load in the values stored in the YAML file
+    stream = open("../config/ADCSledCurrentSenseCalbration.yaml", 'r')
+    dictionary = yaml.load(stream)
+    for key, value in dictionary.items():
+        print (key + " : " + str(value))
+    
+    # Code to here is good but needs fixing beyond this
+
 
     # The first 4 lines are human readable garbage and need to be tossed. The first 
     # line with real data is line index 4
