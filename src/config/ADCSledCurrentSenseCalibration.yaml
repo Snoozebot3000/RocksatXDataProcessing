@@ -9,6 +9,9 @@
   ADCNoCurrent: 8192 #This is the value that represents no current through the windings
   CurrentSensitivity: 0.2 #This value is in Volts/Amp
   CurrentRange: [-5.0,5.0] # This is the current Range in amps of the GMR sensor ACS70331
+  #IMU Calibration data
+  EulerAnglesRocket: [X,Y,Z] #These are the values in radians that give the rotation from the rocket to the IMU
+  IMUCalibration: [Data,Goes,Here]
 
 
 ---
