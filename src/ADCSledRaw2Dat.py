@@ -90,28 +90,28 @@ def main():
     # Create the 3 output files for the different data types
     
     # Check to see if the file exists
-    if os.path.isfile(outputDirectory+"ADCCurrentReadings.dat"):
+    if os.path.isfile(outputDirectory+"RawADCCurrentReadings.dat"):
         print("The output file for the current sensor data exist. Overwrite? [y/n]")
         userInput = input()
         if userInput[0] == "y" or userInput[0] == "Y":
-            os.remove(outputDirectory+"ADCCurrentReadings.dat")
+            os.remove(outputDirectory+"RawADCCurrentReadings.dat")
         else:
             sys.exit("Program exiting so as to not overwrite the file")
 
     # Open file for output failing nicely if it already exists
-    outFileCurrent = open(outputDirectory+"ADCCurrentReadings.dat","x")
+    outFileCurrent = open(outputDirectory+"RawADCCurrentReadings.dat","x")
 
     # Check to see if the file exists
-    if os.path.isfile(outputDirectory+"IMUReadings.dat"):
+    if os.path.isfile(outputDirectory+"RawIMUReadings.dat"):
         print("The output file for the IMU data exist. Overwrite? [y/n]")
         userInput = input()
         if userInput[0] == "y" or userInput[0] == "Y":
-            os.remove(outputDirectory+"IMUReadings.dat")
+            os.remove(outputDirectory+"RawIMUReadings.dat")
         else:
             sys.exit("Program exiting so as to not overwrite the file")
 
     # Open file for output failing nicely if it already exists
-    outFileIMU = open(outputDirectory+"IMUReadings.dat","x")
+    outFileIMU = open(outputDirectory+"RawIMUReadings.dat","x")
 
     # Check to see if the file exists
     if os.path.isfile(outputDirectory+"IMUSync.dat"):
