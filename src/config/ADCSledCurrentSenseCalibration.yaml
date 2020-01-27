@@ -1,4 +1,22 @@
 ---
+  # 
   # This is the file that will contain the lookup values 
   # for taking the raw values and using these values for
   # the variables for the conversion.
+  micros: 1.0e-6
+  ADCBits: 14
+  ADCMax:  16384  # This would indicate an Input of 3.3V on the ADC
+  ADCNoCurrent: 8192 #This is the value that represents no current through the windings
+  CurrentSensitivity: 0.2 #This value is in Volts/Amp
+  CurrentRange: [-5.0,5.0] # This is the current Range in amps of the GMR sensor ACS70331
+
+
+---
+  author: "Nicholas M Limparis"
+  copyright: "Copyright 2020, UMD Rocksat-X"
+  credits: "Nicholas M Limparis"
+  license: "MIT"
+  version: '0.1.0'
+  maintainer: "Nicholas M Limparis"
+  email: "nicholas@github.limpar.is"
+  status: "Dev"
