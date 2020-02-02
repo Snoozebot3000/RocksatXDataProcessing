@@ -25,7 +25,15 @@ from __future__ import print_function
 # Built-in/Generic Imports
 import os
 import sys
-# […]
+
+# Get the Version number for the code here
+__version__ = "unknown"
+try:
+    from _version import __version__
+except ImportError:
+    # We're running in a tree that doesn't have a _version.py, so we don't know what our version is.
+    pass
+
 
 # Libs
 #import pandas as pd # Or any other
@@ -39,7 +47,6 @@ __author__ = 'Nicholas M Limparis'
 __copyright__ = 'Copyright 2020, UMD Rocksat-X'
 __credits__ = ['Nicholas M Limparis']
 __license__ = '{MIT}'
-__version__ = '1.0.0'
 __maintainer__ = 'Nicholas M Limparis'
 __email__ = 'nicholas@github.limpar.is'
 __status__ = 'Rel'
