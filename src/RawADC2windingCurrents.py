@@ -43,6 +43,7 @@ except ImportError:
     pass
 # […]
 
+
 # Libs
 #import pandas as pd # Or any other
 # […]
@@ -58,6 +59,10 @@ __license__ = '{MIT}'
 __maintainer__ = 'Nicholas M Limparis'
 __email__ = 'nicholas@github.limpar.is'
 __status__ = 'Dev'
+
+# Get configuration values from the YAML file
+with open('config/ADCSledCurrentSenseCalibration.yaml') as configFile:
+    configData = yaml.load(configFile, Loader=yaml.FullLoader)
 
 
 #Code goes here.
@@ -88,60 +93,97 @@ def main():
     #separate the file into individual lines
     inputLines  = inFile.readlines()
 
+    # we are done with the input file so lets close it now
+    inFile.close()
+
     #Load in the values stored in the YAML file
-    stream = open("../config/ADCSledCurrentSenseCalbration.yaml", 'r')
-    dictionary = yaml.load(stream)
-    for key, value in dictionary.items():
-        print (key + " : " + str(value))
+    ######### Trying the input method that loads the config file as a dictionary
+   # stream = open("../config/ADCSledCurrentSenseCalbration.yaml", 'r')
+   # dictionary = yaml.load(stream)
+    #for key, value in dictionary.items():
+    #    print (key + " : " + str(value))
     
     # Code to here is good but needs fixing beyond this
 
 
-    # The first 4 lines are human readable garbage and need to be tossed. The first 
-    # line with real data is line index 4
-
-    #print(inputLines[3])
-    #print(outputDirectory)
-
     # Create the 3 output files for the different data types
     
-    # Check to see if the file exists
+    # Check to see if the ADC Current readings file exists
     if os.path.isfile(outputDirectory+"ADCCurrentReadings.dat"):
         print("The output file for the current sensor data exist. Overwrite? [y/n]")
         userInput = input()
         if userInput[0] == "y" or userInput[0] == "Y":
             os.remove(outputDirectory+"ADCCurrentReadings.dat")
         else:
-            sys.exit("Program exiting so as to not overwrite the file")
+            sys.exit("Program exiting so as to not overwrite the ADC Current readings file")
 
     # Open file for output failing nicely if it already exists
     outFileCurrent = open(outputDirectory+"ADCCurrentReadings.dat","x")
 
-    # Check to see if the file exists
+    # Check IMU Readings file to see if the file exists
     if os.path.isfile(outputDirectory+"IMUReadings.dat"):
         print("The output file for the IMU data exist. Overwrite? [y/n]")
         userInput = input()
         if userInput[0] == "y" or userInput[0] == "Y":
             os.remove(outputDirectory+"IMUReadings.dat")
         else:
-            sys.exit("Program exiting so as to not overwrite the file")
+            sys.exit("Program exiting so as to not overwrite the IMU Readings file")
 
-    # Open file for output failing nicely if it already exists
+    # Open IMU Readings file for output failing nicely if it already exists
     outFileIMU = open(outputDirectory+"IMUReadings.dat","x")
 
-    # Check to see if the file exists
+    # Check IMU Sync File to see if the file exists
     if os.path.isfile(outputDirectory+"IMUSync.dat"):
         print("The output file for the IMU Sync data exist. Overwrite? [y/n]")
         userInput = input()
         if userInput[0] == "y" or userInput[0] == "Y":
             os.remove(outputDirectory+"IMUSync.dat")
         else:
-            sys.exit("Program exiting so as to not overwrite the file")
+            sys.exit("Program exiting so as to not overwrite the IMU Sync file")
 
     # Open file for output failing nicely if it already exists
     outFileIMUSync = open(outputDirectory+"IMUSync.dat","x")
 
     # This is where the Main code for the program goes
+
+    # So now everything is now open!
+
+    # The first 4 lines are human readable garbage and need to be not included in the data files. The first 
+    # line with real data is line index 3
+
+    #print(inputLines[3])
+    #print(outputDirectory)
+    
+    # Ok now we need to sort out the files into their respective output files
+    for i in range(3,len(inputLines)):
+        parsedLineList = inputLines[i].split(",")
+        #First index is the datatype (49 is ADC readings,50 is IMU Readings, 51 is IMUSync)
+        if parsedLineList[0].isnumeric():
+            if int(parsedLineList[0]) == 49:
+                #Copy rest of parsed line to outFileCurrent after converting to currents
+                #49,micros,adc0,adc1,adc2
+                # conversion from adc value to
+                adc2Volts = configData.ADCMaxVDC / configData.ADCNoCurrent
+                adc2Amps = configData.CurrentRange[1] / configData.ADCNoCurrent
+                current0 = (int(parsedLineList[2]) - configData.ADCNoCurrent ) * adc2Amps
+                current1 = (int(parsedLineList[3]) - configData.ADCNoCurrent ) * adc2Amps
+                current2 = (int(parsedLineList[4]) - configData.ADCNoCurrent ) * adc2Amps
+                outFileCurrent.write(parsedLineList[1] + "," + current0 + "," + current1 + "," + current2 )
+            elif int(parsedLineList[0]) == 50:
+                #Copy rest of parsed line to outFileIMU after converting to human readable values
+                #50,micros,AccelX,GyroX,MagX,AccelY,GyroY,MagY,AccelZ,GyroZ,MagZ
+                pass
+            elif int(parsedLineList[0]) == 51:
+                #Copy rest of parsed line to outfileCurrent after converting to currents
+                #51,microsAtInteruptSync
+                pass
+            else:
+                # not one of the expected data types raise an error
+                raise SystemExit("Unexpected data type on line " + str(i) + " of data file " + inputFileName)
+        else:
+            raise SystemExit("Malformed Data on line "+ str(i) + " of Data File: " + inputFileName)
+
+
 
 
     # This allows the file to run as stand alone or as called to run by another program.
