@@ -1,9 +1,9 @@
----
   # 
   # This is the file that will contain the lookup values 
   # for taking the raw values and using these values for
   # the variables for the conversion.
-  micros: 1.0e-6
+---
+  microssec: 1.0e-6
   ADCBits: 14
   ADCMaxValue:  16384  # This would indicate an Input of 3.3V on the ADC
   ADCMaxVDC: 3.3  # This is the greatest positive voltage the ADC accepts
@@ -14,12 +14,10 @@
   EulerAnglesRocket: [X,Y,Z] #These are the values in radians that give the rotation from the rocket to the IMU [X,Y,Z]
   IMUCalibration: [Data,Goes,Here] #This is the calibration data for the sensors.
 
-
----
   author: "Nicholas M Limparis"
   copyright: "Copyright 2020, UMD Rocksat-X"
   credits: "Nicholas M Limparis"
   license: "MIT"
-   maintainer: "Nicholas M Limparis"
+  maintainer: "Nicholas M Limparis"
   email: "nicholas@github.limpar.is"
   status: "Dev"
