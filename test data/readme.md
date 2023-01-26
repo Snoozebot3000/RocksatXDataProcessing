@@ -1,0 +1,1 @@
+This is properly formatted test data but it does not have the actual flight data here. Data will be released upon publication of the journal paper.
