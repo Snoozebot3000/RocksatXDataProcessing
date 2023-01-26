@@ -111,3 +111,6 @@ venv.bak/
 outputData/ADCCurrentReadings.dat
 outputData/IMUReadings.dat
 outputData/IMUSync.dat
+src/Data64_ADCCurrentReadings.dat
+src/Data64_IMUReadings.dat
+src/Data64_IMUSync.dat
