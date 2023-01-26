@@ -19,7 +19,8 @@ this program.
 
 ../config/ADCSledCurrentSenseCalbration.yaml
 
-This tool will accept commands as follows and is written in Python 3
+This tool will accept commands as follows and is written in Python 3 and
+expecting input for files in Unix style
 
 python3 RawADC2windingCurrents.py /Input/File/Path.dat /Output/Files/Folder/
 
@@ -62,8 +63,11 @@ __status__ = 'Dev'
 
 # Get configuration values from the YAML file
 with open('config/ADCSledCurrentSenseCalibration.yaml') as configFile:
-    configData = yaml.load(configFile, Loader=yaml.FullLoader)
+    configData = yaml.safe_load(configFile) #, Loader=yaml.FullLoader)
 
+#Tests to make sure the Yaml file loaded properly
+#print(yaml.dump(configData))
+#print(configData["ADCBits"])
 
 #Code goes here.
 def main():
@@ -77,6 +81,12 @@ def main():
         sys.exit("The input file given is not a file")   
     else:
         inputFileName = str(sys.argv[1])
+        dataFileNameList = inputFileName.split(os.sep)
+        dataFileNameSplit = dataFileNameList[len(dataFileNameList)-1].split(".") # This gives us the final part of the data filename string
+        dataFileName = dataFileNameSplit[0]
+
+
+
         
     #Check to see if the second command line argument is a directory
     if (not os.path.isdir(str(sys.argv[2]))):
@@ -109,40 +119,40 @@ def main():
     # Create the 3 output files for the different data types
     
     # Check to see if the ADC Current readings file exists
-    if os.path.isfile(outputDirectory+"ADCCurrentReadings.dat"):
+    if os.path.isfile(outputDirectory + dataFileName + "_ADCCurrentReadings.dat"):
         print("The output file for the current sensor data exist. Overwrite? [y/n]")
         userInput = input()
         if userInput[0] == "y" or userInput[0] == "Y":
-            os.remove(outputDirectory+"ADCCurrentReadings.dat")
+            os.remove(outputDirectory + dataFileName + "_ADCCurrentReadings.dat")
         else:
             sys.exit("Program exiting so as to not overwrite the ADC Current readings file")
 
     # Open file for output failing nicely if it already exists
-    outFileCurrent = open(outputDirectory+"ADCCurrentReadings.dat","x")
+    outFileCurrent = open(outputDirectory + dataFileName + "_ADCCurrentReadings.dat","x")
 
     # Check IMU Readings file to see if the file exists
-    if os.path.isfile(outputDirectory+"IMUReadings.dat"):
+    if os.path.isfile(outputDirectory + dataFileName + "_IMUReadings.dat"):
         print("The output file for the IMU data exist. Overwrite? [y/n]")
         userInput = input()
         if userInput[0] == "y" or userInput[0] == "Y":
-            os.remove(outputDirectory+"IMUReadings.dat")
+            os.remove(outputDirectory + dataFileName + "_IMUReadings.dat")
         else:
             sys.exit("Program exiting so as to not overwrite the IMU Readings file")
 
     # Open IMU Readings file for output failing nicely if it already exists
-    outFileIMU = open(outputDirectory+"IMUReadings.dat","x")
+    outFileIMU = open(outputDirectory + dataFileName + "_IMUReadings.dat","x")
 
     # Check IMU Sync File to see if the file exists
-    if os.path.isfile(outputDirectory+"IMUSync.dat"):
+    if os.path.isfile(outputDirectory + dataFileName + "_IMUSync.dat"):
         print("The output file for the IMU Sync data exist. Overwrite? [y/n]")
         userInput = input()
         if userInput[0] == "y" or userInput[0] == "Y":
-            os.remove(outputDirectory+"IMUSync.dat")
+            os.remove(outputDirectory + dataFileName + "_IMUSync.dat")
         else:
             sys.exit("Program exiting so as to not overwrite the IMU Sync file")
 
     # Open file for output failing nicely if it already exists
-    outFileIMUSync = open(outputDirectory+"IMUSync.dat","x")
+    outFileIMUSync = open(outputDirectory + dataFileName + "_IMUSync.dat","x")
 
     # This is where the Main code for the program goes
 
@@ -155,7 +165,7 @@ def main():
     #print(outputDirectory)
     
     # Ok now we need to sort out the files into their respective output files
-    for i in range(3,len(inputLines)):
+    for i in range(4,len(inputLines)):  #4 is the index of the first line of data
         parsedLineList = inputLines[i].split(",")
         #First index is the datatype (49 is ADC readings,50 is IMU Readings, 51 is IMUSync)
         if parsedLineList[0].isnumeric():
@@ -163,20 +173,24 @@ def main():
                 #Copy rest of parsed line to outFileCurrent after converting to currents
                 #49,micros,adc0,adc1,adc2
                 # conversion from adc value to
-                adc2Volts = configData.ADCMaxVDC / configData.ADCNoCurrent
-                adc2Amps = configData.CurrentRange[1] / configData.ADCNoCurrent
-                current0 = (int(parsedLineList[2]) - configData.ADCNoCurrent ) * adc2Amps
-                current1 = (int(parsedLineList[3]) - configData.ADCNoCurrent ) * adc2Amps
-                current2 = (int(parsedLineList[4]) - configData.ADCNoCurrent ) * adc2Amps
-                outFileCurrent.write(parsedLineList[1] + "," + current0 + "," + current1 + "," + current2 )
+                adc2Volts = configData["ADCMaxVDC"] / configData["ADCNoCurrent"]
+                adc2Amps = configData["CurrentRange"][1] / configData["ADCNoCurrent"]
+                current0 = (int(parsedLineList[2]) - configData["ADCNoCurrent"] ) * adc2Amps
+                current1 = (int(parsedLineList[3]) - configData["ADCNoCurrent"] ) * adc2Amps
+                current2 = (int(parsedLineList[4]) - configData["ADCNoCurrent"] ) * adc2Amps
+                outFileCurrent.write(str(parsedLineList[1]) + "," + str(current0) + "," + str(current1) + "," + str(current2) + "\n") # Timestamp (micros), CurrentPhase1, CurrentPhase2, CurrentPhase3
             elif int(parsedLineList[0]) == 50:
                 #Copy rest of parsed line to outFileIMU after converting to human readable values
                 #50,micros,AccelX,GyroX,MagX,AccelY,GyroY,MagY,AccelZ,GyroZ,MagZ
+
+
+
+                #outFileIMU.write(str(parsedLineList[1]) + "," + str(current0) + "," + str(current1) + "," + str(current2) + "\n") # Timestamp (micros), CurrentPhase1, CurrentPhase2, CurrentPhase3
                 pass
             elif int(parsedLineList[0]) == 51:
-                #Copy rest of parsed line to outfileCurrent after converting to currents
+                #Record the timestamps in Micro seconds for a timesync from the main computer to sync the system IMUs
                 #51,microsAtInteruptSync
-                pass
+                outFileIMUSync.write(str(parsedLineList[1]) + "\n") # Timestamp (micros) of sync pulse
             else:
                 # not one of the expected data types raise an error
                 raise SystemExit("Unexpected data type on line " + str(i) + " of data file " + inputFileName)
