@@ -114,6 +114,7 @@ outputData/IMUSync.dat
 src/Data64_ADCCurrentReadings.dat
 src/Data64_IMUReadings.dat
 src/Data64_IMUSync.dat
-outputData/Data64_IMUReadings.dat
-outputData/Data64_IMUSync.dat
-outputData/Data64_ADCCurrentReadings.dat
+outputData/
+testData/
+
+
