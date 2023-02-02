@@ -115,6 +115,8 @@ src/Data64_ADCCurrentReadings.dat
 src/Data64_IMUReadings.dat
 src/Data64_IMUSync.dat
 outputData/
-testData/
+test data/
 
+!test data/Data64.dat
 
+.DS_Store
