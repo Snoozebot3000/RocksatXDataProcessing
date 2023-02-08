@@ -7,12 +7,15 @@
   ADCBits: 14
   ADCMaxValue:  16384  # This would indicate an Input of 3.3V on the ADC
   ADCMaxVDC: 3.3  # This is the greatest positive voltage the ADC accepts
-  ADCNoCurrent: 8192 #This is the value that represents no current through the windings
+  #ADCNoCurrent: 8192  #This is the value that represents no current through the windings 
+                      #Datasheet says that the no current value is 1.5V 
+  ADCNoCurrentVoltage: 1.5
   CurrentSensitivity: 0.2 #This value is in Volts/Amp
   CurrentRange: [-5.0,5.0] # This is the current Range in amps of the GMR sensor ACS70331
   #IMU Calibration data
   EulerAnglesRocket: [X,Y,Z] #These are the values in radians that give the rotation from the rocket to the IMU [X,Y,Z]
   IMUCalibration: [Data,Goes,Here] #This is the calibration data for the sensors.
+  IMURanges: [[-2,2],[-2000,2000],[-4192,4192]] # Range of reading [Acceleration in g, Rotation Rate in DPS, Mag Field in uT]
 
   author: "Nicholas M Limparis"
   copyright: "Copyright 2020, UMD Rocksat-X"
