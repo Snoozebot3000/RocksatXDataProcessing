@@ -3,6 +3,7 @@
   # for taking the raw values and using these values for
   # the variables for the conversion.
 ---
+  # The robot arm IMUs are 
   microssec: 1.0e-6
   ADCBits: 14
   ADCMaxValue:  16384  # This would indicate an Input of 3.3V on the ADC
@@ -17,6 +18,11 @@
   IMUCalibration: [Data,Goes,Here] #This is the calibration data for the sensors.
   IMURanges: [[-2,2],[-2000,2000],[-4192,4192]] # Range of reading [Acceleration in g, Rotation Rate in DPS, Mag Field in uT]
 
+  Origin2IMU: [44.1,39.5,40.8]  # this is in mm from Origin to IMU in the origin frame
+  Origin2IMURotAccelGyro: [0,90,0]  # (x,y,z)-->(z,y,-x)
+  Origin2IMURotMag: [-90,0,-90]  # (x,y,z) --> (y,z,x)
+
+  
   author: "Nicholas M Limparis"
   copyright: "Copyright 2020, UMD Rocksat-X"
   credits: "Nicholas M Limparis"
